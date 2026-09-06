@@ -21,7 +21,6 @@ DB_PATH = Path("data/comments.db")
 Path("data").mkdir(exist_ok=True)
 
 # ---------- Helper utilities ----------
-@st.cache_resource
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -47,16 +46,17 @@ def init_db():
     conn.close()
 
 def load_comments(misattributed: bool | None = None) -> pd.DataFrame:
-    conn = get_db_connection()
-    cur = conn.cursor()
-    if misattributed is None:
-        cur.execute("SELECT * FROM comments")
-    else:
-        cur.execute(
-            "SELECT * FROM comments WHERE is_misattributed = ?",
-            (int(misattributed),),
-        )
-    rows = cur.fetchall()
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        if misattributed is None:
+            cur.execute("SELECT * FROM comments")
+        else:
+            cur.execute(
+                "SELECT * FROM comments WHERE is_misattributed = ?",
+                (int(misattributed),),
+            )
+        rows = cur.fetchall()
     df = pd.DataFrame([dict(row) for row in rows])
     if not df.empty and "timestamp" in df.columns:
         df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
