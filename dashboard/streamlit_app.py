@@ -4,6 +4,13 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 
+import sys
+from pathlib import Path
+# Ensure the repository root is on the Python path so imports work on Streamlit Cloud
+repo_root = Path(__file__).resolve().parents[1]
+if str(repo_root) not in sys.path:
+    sys.path.append(str(repo_root))
+
 # Import scraper functions
 from scraper.main import fetch_comments, store_comments
 
