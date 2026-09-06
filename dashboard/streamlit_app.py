@@ -21,7 +21,7 @@ DB_PATH = Path("data/comments.db")
 Path("data").mkdir(exist_ok=True)
 
 # ---------- Helper utilities ----------
-@st.experimental_singleton
+@st.cache_resource
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
