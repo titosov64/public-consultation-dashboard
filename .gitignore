@@ -1,0 +1,9 @@
+# SQLite DB generated at runtime – we don’t want it version‑controlled
+data/comments.db
+
+# Python cache / compiled files
+__pycache__/
+*.py[cod]
+
+# Optional IDE settings (VS Code, PyCharm, etc.)
+.vscode/
