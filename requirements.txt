@@ -9,3 +9,5 @@ pydantic
 streamlit
 textblob
 pandas
+playwright==1.45.0
+streamlit-autorefresh==1.0.3

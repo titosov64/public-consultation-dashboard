@@ -1,4 +1,4 @@
-import requests
+# import requests (removed, using Playwright)
 from bs4 import BeautifulSoup
 from datetime import datetime
 import sqlite3
@@ -10,15 +10,9 @@ MISATTRIBUTED_ID = 15
 
 
 def fetch_comments():
-    url = f"{BASE_URL}{CONSULTATION_ID}"
-    resp = requests.get(url, timeout=10)
-    resp.raise_for_status()
-    soup = BeautifulSoup(resp.text, "html.parser")
-    comments = parse_comments(soup)
-    # Mark mis‑attributed ones
-    for c in comments:
-        c["is_misattributed"] = detection_misattribution(c["text"]) 
-    return comments
+    """Fetch comments using Playwright for dynamic content."""
+    from .playwright_fetch import fetch_comments as _fetch
+    return _fetch()
 
 
 def store_comments(comments):

@@ -13,6 +13,7 @@ if str(repo_root) not in sys.path:
 
 # Import scraper functions
 from scraper.main import fetch_comments, store_comments
+from streamlit_autorefresh import st_autorefresh
 
 # Path to SQLite DB (will be created in the repo; Streamlit Cloud provides read/write space)
 DB_PATH = Path("data/comments.db")
@@ -87,10 +88,9 @@ with st.sidebar:
     )
     st.caption("Auto‑refresh works only while the app session is active.")
 
-# Auto‑refresh using Streamlit‑provided timer
 if refresh_interval != "Never":
     minutes = {"5 min": 5, "15 min": 15, "30 min": 30, "1 hour": 60}[refresh_interval]
-    st.experimental_rerun()  # placeholder – Streamlit will rerun on interval via `st.experimental_set_query_params` hack if needed (advanced). For simplicity, we just provide manual refresh.
+    st_autorefresh(interval=minutes * 60 * 1000, key=f"autorefresh-{minutes}")
 
 # Load data
 all_df = load_comments()
